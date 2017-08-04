@@ -265,7 +265,7 @@ curl -X GET 'http://$HOST/api/project/info' \
 {
     "code": 10000,
     "errMsg": "success",
-    "data": "",
+    "content": "",
 }
 ```
 
@@ -480,7 +480,7 @@ curl
 | 名称      | 类型     | 示例值      | 描述     |
 | ------- | ------ | -------- | ------ |
 | code    | int    | 10000    | 返回码    |
-| errmsg  | strng  | "sucess" | 接口返回信息 |
+| errMsg  | strng  | "sucess" | 接口返回信息 |
 | content | object | null     | 返回结果   |
 
 content参数
@@ -502,8 +502,8 @@ curl -X POST 'http://$HOST/api/project/build' \
 ```json
 {
     "code": 10000,
-    "msg": "success",
-    "data": "",
+    "errMsg": "success",
+    "content": "",
 }
 ```
 
@@ -512,8 +512,8 @@ curl -X POST 'http://$HOST/api/project/build' \
 ```json
 {
     "code": 10008,
-    "msg": "Project: xxx  to query info not exist",
-    "data": null,
+    "errMsg": "Project: xxx  to query info not exist",
+    "content": null,
 }
 ```
 

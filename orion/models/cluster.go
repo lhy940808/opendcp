@@ -44,13 +44,3 @@ type Pool struct {
 	Tasks   string   `json:"tasks"`   //对应任务(task_name arr)
 	Service *Service `json:"-" orm:"rel(fk);on_delete(cascade)"`
 }
-
-//type Node struct {
-//	Id       int    `json:"id" orm:"pk;auto"`
-//	Ip       string `json:"ip" orm:"null"`
-//	VmId     string `json:"vm_id" orm:"null"`
-//	Status   int    `json:"status"`
-//	Pool     *Pool  `json:"-" orm:"rel(fk);on_delete(cascade)"`
-//	NodeType string `json:"node_type" orm:"default("manual")"`
-//	//Cluster*Cluster`json:"-" orm:"rel(fk);on_delete(cascade)"`
-//}

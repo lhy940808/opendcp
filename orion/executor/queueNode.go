@@ -21,7 +21,12 @@ package executor
 
 import (
 	"github.com/astaxie/beego"
+	"time"
 	"weibo.com/opendcp/orion/models"
+)
+
+const (
+	runNodeInterval = time.Microsecond //1us
 )
 
 // Worker keep a queue to hold tasks, and run them one by one.
@@ -30,15 +35,12 @@ type QueueNode struct {
 }
 
 type ToRunNodeState struct {
-	resultChannel  chan *models.NodeState
-	flow           *models.Flow
-	steps          []*models.ActionImpl
-	stepOptions    []*models.StepOption
-	successNodeNum int
-	nodeState      *models.NodeState
+	resultChannel chan *models.NodeState
+	flow          *models.Flow
+	steps         []*models.ActionImpl
+	stepOptions   []*models.StepOption
+	nodeState     *models.NodeState
 }
-
-// Job represents a task to be run by worker.
 
 // NewWorker creates a new worker.
 func NewQueueNode() *QueueNode {
@@ -53,8 +55,8 @@ func (q *QueueNode) loop() {
 			// queue closed
 			break
 		}
-		//修改使任务并行运行
 		go q.safeRun(runNode)
+		time.Sleep(runNodeInterval)
 	}
 }
 
@@ -66,8 +68,8 @@ func (q *QueueNode) safeRun(runNode ToRunNodeState) {
 	}()
 
 	beego.Info("Start running nodeState on flow [", runNode.flow.Id, "]")
-	err := Executor.RunNodeState(runNode.flow, runNode.nodeState,
-		runNode.successNodeNum, runNode.steps, runNode.stepOptions, runNode.resultChannel)
+	err := Executor.RunNodeState(runNode.flow, runNode.nodeState, runNode.steps,
+		runNode.stepOptions, runNode.resultChannel)
 	if err == nil {
 		beego.Info("Finish running nodeState on flow [", runNode.flow.Id, "]")
 	} else {
@@ -76,7 +78,6 @@ func (q *QueueNode) safeRun(runNode ToRunNodeState) {
 }
 
 // Submit submits new job into queue of this worker, and return error
-// if the queue if full.
 func (q *QueueNode) Submit(runNode ToRunNodeState) {
 	select {
 	case q.workNodeQueue <- runNode:

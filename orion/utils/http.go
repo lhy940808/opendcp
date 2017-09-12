@@ -34,7 +34,7 @@ import (
 var (
 	Http   = &httpUtil{}
 	client = &http.Client{
-		Timeout: 5 * 60 * time.Second,
+		Timeout: 9 * 60 * time.Second,
 	}
 )
 
@@ -103,19 +103,3 @@ func handleResp(resp *http.Response) (string, error) {
 
 	return string(body), nil
 }
-
-/*
-func (h *httpUtil) Get(url string) (string, error) {
-	log.Debug("GET", url)
-	req, _ := http.NewRequest("GET", url, nil)
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-
-	defer resp.Body.Close()
-	return handleResp(resp)
-}
-*/
